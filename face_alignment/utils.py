@@ -4,11 +4,11 @@ import errno
 import torch
 import math
 import numpy as np
-import cv2
+#import cv2
 from skimage import io
 from skimage import color
 from numba import jit
-
+from PIL import Image
 from urllib.parse import urlparse
 from torch.hub import download_url_to_file, HASH_REGEX
 try:
@@ -140,8 +140,10 @@ def crop(image, center, scale, resolution=256.0):
     oldY = np.array([max(1, ul[1] + 1), min(br[1], ht)], dtype=np.int32)
     newImg[newY[0] - 1:newY[1], newX[0] - 1:newX[1]
            ] = image[oldY[0] - 1:oldY[1], oldX[0] - 1:oldX[1], :]
-    newImg = cv2.resize(newImg, dsize=(int(resolution), int(resolution)),
-                        interpolation=cv2.INTER_LINEAR)
+    
+    newImg = np.array(Image.fromarray(newImg).resize((int(resolution), int(resolution))))
+    # newImg = cv2.resize(newImg, dsize=(int(resolution), int(resolution)),
+    #                     interpolation=cv2.INTER_LINEAR)
     return newImg
 
 

@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
-
-import cv2
+from PIL import Image, ImageOps
+#import cv2
 import numpy as np
 
 from .bbox import *
@@ -69,7 +69,14 @@ def get_predictions(olist, batch_size):
 
 
 def flip_detect(net, img, device):
-    img = cv2.flip(img, 1)
+    
+    
+
+    img = Image.fromarray(img)
+    img = np.array(ImageOps.flip(img))
+
+
+    #img = cv2.flip(img, 1)
     b = detect(net, img, device)
 
     bboxlist = np.zeros(b.shape)
